@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class = "container" style="position: relative;margin-top: 5%;">
+		<div class="row justify-content-center">
+		<div class = "col-md-8">
+			<div class="card shadow">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+                            <h1>Register with MYNK</h1>
+                            <hr>
+							<form action="{% url 'accounts:register'%}" method="post" class = "form-group">
+								{% csrf_token %}
+								{{regForm|crispy}}
+								<input type="submit" name="register" value="Register" class="btn btn-success btn-sm mt-1 mb-1">
+                            </form>
+                            <br>
+                            <a style="text-decoration: none;" href = "{% url 'accounts:authenticate' %}"><small>Already have an account?</small></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+{% endblock %}
