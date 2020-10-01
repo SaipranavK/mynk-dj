@@ -2,14 +2,12 @@
 <html>
     <head>
         <!-- CSS only -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/materia/bootstrap.min.css">
+        
     </head>
 
     <style>
-        h1,h2,h3,h4,h5,h6,p, small {
-            font-family: 'Nunito', sans-serif;
-        }
+       
         body{
             background-color: lightcyan;
         }
@@ -17,12 +15,14 @@
 
     <body>
         {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="margin-left: -4px; margin-right: -4px;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 			<br>
-			{% for message in messages %}
-				<div class="alert alert-{{message.tags}}">
-					{{message}}
-				</div>
-				<br><br>
 			{% endfor %}
         {% endif %}
         

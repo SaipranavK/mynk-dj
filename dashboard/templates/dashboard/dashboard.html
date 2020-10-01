@@ -64,8 +64,27 @@
                 <div class="col-md-12">
                     <h1>
                         Categories
-                    </h1>
+                        <span style="float: right;"><a class="btn btn-primary btn-sm mt-1 mb-1" href="{% url 'category:add' %}">Add</a></span>
+                    </h1>   
                     <hr>
+
+                    <div class="row">
+                        {% for category in categories %}
+                         <div class="col-md-4">
+                             <div class="card">
+                                 <div class="card-body">
+                                     <center>
+                                        <h3>{{category.name}}</h3>
+                                        <p>{{cat_spent}}/{{category.value}}</p>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: {{cat_spent_per}}%;" aria-valuenow="{{cat_spent}}" aria-valuemin="0" aria-valuemax="{{category.value}}}"></div>
+                                        </div>
+                                     </center>
+                                 </div>
+                             </div>
+                         </div>   
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
