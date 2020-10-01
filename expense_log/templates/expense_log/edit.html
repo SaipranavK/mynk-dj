@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class = "container" style="position: relative;margin-top: 5%;">
+		<div class="row justify-content-center">
+		<div class = "col-md-8">
+			<div class="card shadow">
+				<div class="card-body">
+					<div class="row justify-content-center">
+						<div class="col-md-12">
+                            <h1>Edit Expense Log</h1>
+                            <hr>
+							<form method="post" class = "form-group">
+								{% csrf_token %}
+								{{expenseLogForm|crispy}}
+                                <input type="submit" value="Continue" class="btn btn-success btn-sm mt-1 mb-1">
+                                <a href="{% url 'dashboard:root' %}" class="btn btn-dark btn-sm mt-1 mb-1">Back</a>
+                            </form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+{% endblock %}

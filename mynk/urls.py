@@ -29,6 +29,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('category/', include('category.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('expense-log/', include('expense_log.urls'))
 ]
 
 urlpatterns+=staticfiles_urlpatterns()

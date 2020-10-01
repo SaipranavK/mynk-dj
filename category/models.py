@@ -7,5 +7,5 @@ class Category(models.Model):
     value = models.PositiveIntegerField(default = 0, verbose_name = "Category Limit", help_text = "Maximum spending in this category from total monthly expense")
 
     def __str__(self):
-        return str(self.user) + " | " + self.name
+        return self.name
 
