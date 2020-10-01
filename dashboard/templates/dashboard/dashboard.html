@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
+            <div class="card shadow p-3 mb-5">
+                <div class="card-body">
+                    <center>
+                        <img src="{{user.profile.image.url}}" style="max-width: 60%;height: auto;"
+                            class="rounded-circle img-responsive">
+                    </center>
+                    <center>
+                        <h2>{{user}}</h2>
+
+                        <hr>
+                        <a href="{% url 'accounts:edit' %}" class="btn btn-warning btn-sm mt-1 mb-1"
+                            style="float: center;">Edit Profile</a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger btn-sm mt-1 mb-1"
+                            style="float: center;">Logout</a>
+                    </center>
+                </div>
+            </div>
+
+            <div class="card shadow p-3 mb-5">
+                <div class="card-body">
+                    <center>
+                        <h3>{{user.profile.monthly_limit}} SEK</h3>
+                        <small class="text-muted">Monthly Expense Limit</small>
+                    </center>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 col-12">
+            <div class="row justify-content-center">
+
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <center>
+                                <h1>{{spent}}</h1>
+                                <h3>Spent</h3>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <center>
+                                <h1>{{remaining}}</h1>
+                                <h3>Remaining</h3>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <h1>
+                        Categories
+                    </h1>
+                    <hr>
+                </div>
+            </div>
+
+            <br><br>
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <h1>
+                        Expense Log
+                    </h1>
+                    <hr>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
