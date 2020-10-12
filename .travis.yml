@@ -7,6 +7,7 @@ services:
   - 'docker'
 
 before_install:
+  - chmod +x main.sh
   - '.travis/main.sh'
 
 # command to install dependencies
