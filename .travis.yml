@@ -17,7 +17,8 @@ after_success:
 - DOCKER_TAG=$TRAVIS_BRANCH
 - DOCKER_REPO=saipranavk/mynk
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker build -t ${DOCKER_REPO}
+- docker build -t mynk
+- docker tag mynk:${DOCKER_TAG} push ${DOCKER_REPO}
 - docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
 notifications:
