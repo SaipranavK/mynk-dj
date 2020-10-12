@@ -1,4 +1,4 @@
-# Mynk - app
-[![branding](https://img.shields.io/badge/Mynk-ExpenseManager-brightgreen)](https://github.com/SaipranavK/mynk-dj)
+# Mynk
+[![travis-build](https://travis-ci.org/SaipranavK/mynk-dj.svg?branch=master)](https://travis-ci.org/SaipranavK/mynk-dj.svg?branch=master)
 
-Expense manager for monitoring and tracking monthly budget.
+Mynk supports monthly budget management with expense visualizations, alerts and monthly reports to review your purchases.

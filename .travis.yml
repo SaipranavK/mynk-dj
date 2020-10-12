@@ -11,3 +11,12 @@ install:
 # command to run tests
 script:
   - python manage.py test
+
+after_success:
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+        make push-image ;
+      fi
+
+notifications:
+    email: false
