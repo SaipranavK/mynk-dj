@@ -9,16 +9,33 @@ from . import models
 from .forms import ExpenseLogForm
 
 from category.models import Category
-
+from alerts.models import Alert
 
 @login_required(login_url = 'accounts:authenticate')
 def create_log(request):
     if request.method == 'POST':
-        expenseLogForm =ExpenseLogForm(request.POST)    
+        expenseLogForm =ExpenseLogForm(request.POST, request.FILES)   
+        print(expenseLogForm) 
         if expenseLogForm.is_valid():
             instance = expenseLogForm.save(commit=False)
             instance.user=request.user
+            
+            category = instance.category
+            category.this_month += instance.amount
+
+            try:
+                userCheck = Q(user = request.user)
+                categoryCheck = Q(category = category)
+                alert = Alert.objects.get(userCheck & categoryCheck)
+                if category.this_month >= alert.limit:
+                    alert.alert_message = "You have crossed your alert limit for "+ category.name +" this month. Be careful while spending to avoid going your budget"
+                    alert.save() 
+            except:
+                pass
+
+            category.save()
             instance.save()
+            
             
             return redirect('dashboard:root')
     else:
@@ -36,16 +53,23 @@ def update_log(request,id):
     except:
         messages.success("Unable to fetch requested expense log from your profile")
         return redirect("dashboard:root")
-   
-    #this code still not work corectly and instead of update it just add new row  as expensecheck = Q(pk = id) will be key of table not specific to user may be database need more clearence 
-    #except:
-        #messages.success("Unable to fetch requested user profile")
-    #   return redirect("dashboard:root")
     
     if request.method == 'POST':
-        expenseLogForm =ExpenseLogForm(request.POST, instance = ex_log)
+        expenseLogForm =ExpenseLogForm(request.FILES, request.POST, instance = ex_log)
         if expenseLogForm.is_valid():
-            expenseLogForm.save()
+            instance = expenseLogForm.save(commit = False)
+
+            try:
+                category = instance.category
+                userCheck = Q(user = request.user)
+                categoryCheck = Q(category = category)
+                alert = Alert.objects.get(userCheck & categoryCheck)
+                if category.this_month >= alert.limit:
+                    alert.alert_message = "You have crossed your alert limit for "+ category.name +" this month. Be careful while spending to avoid going your budget"
+                    alert.save() 
+            except:
+                pass
+            
             return redirect('dashboard:root')
     
     else:
@@ -55,5 +79,4 @@ def update_log(request,id):
     expenseLogForm.fields["category"].queryset= Category.objects.filter(user = request.user)
         
     return render(request, "expense_log/edit.html", {"expenseLogForm":expenseLogForm})
-
 

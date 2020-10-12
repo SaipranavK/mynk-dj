@@ -19,9 +19,9 @@ def add_category(request):
             
             sum += instance.value
             
-            if(sum >= request.user.profile.monthly_limit):
+            if(sum > request.user.profile.monthly_limit - request.user.profile.monthly_savings):
                 messages.warning(request,f'Exceeding Monthly Expense limit')
-                return redirect("dashboard:root")
+                return redirect("category:add")
 
             instance = catForm.save(commit = False)
             instance.user = request.user

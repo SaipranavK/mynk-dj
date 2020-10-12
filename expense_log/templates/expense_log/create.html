@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<div class = "container" style="position: relative;margin-top: 5%;">
+	<div class = "container">
 		<div class="row justify-content-center">
 		<div class = "col-md-8">
 			<div class="card shadow">
 				<div class="card-body">
 					<div class="row justify-content-center">
 						<div class="col-md-12">
-                            <h1>Add Expense Log</h1>
+                            <h5>Add Expense Log</h5>
                             <hr>
-							<form method="post" class = "form-group">
+							<form method="post" class = "form-group" enctype="multipart/form-data">
 								{% csrf_token %}
 								{{expenseLogForm|crispy}}
                                 <input type="submit" value="Continue" class="btn btn-success btn-sm mt-1 mb-1">

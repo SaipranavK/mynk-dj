@@ -1,36 +1,78 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <!-- CSS only -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/materia/bootstrap.min.css">
-        
-    </head>
+<html lang="en">
+{% load static %}
 
-    <style>
-       
-        body{
-            background-color: lightcyan;
-        }
-    </style>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+        content="Purpose Application UI is the following chapter we've finished in order to create a complete and robust solution next to the already known Purpose Website UI.">
+    <meta name="author" content="Webpixels">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head-add %}{% endblock %}
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'purpose-UI/img/brand/favicon.png' %}" type="image/png">
+    <!-- Font Awesome 5 -->
+    <link rel="stylesheet" href="{% static 'purpose-UI/libs/@fortawesome/fontawesome-free/css/all.min.css' %}">
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="{% static 'purpose-UI/libs/fullcalendar/dist/fullcalendar.min.css' %}">
+    <!-- Purpose CSS -->
+    <link rel="stylesheet" href="{% static 'purpose-UI/css/purpose.css' %}" id="stylesheet">
+    
+</head>
 
-    <body>
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="margin-left: -4px; margin-right: -4px;">
-                {{message}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-			<br>
-			{% endfor %}
-        {% endif %}
-        
-        <div style="margin-top: 2rem;">{% block content %}{% endblock %}</div>
-        
-        <!-- JS, Popper.js, and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    </body>
-</html>
+{% block style %}{% endblock %}
+
+
+<body class="application application-offset">
+
+    <nav class="navbar navbar-expand main-nav shadow " style="height: 80px;">
+        <div class="container justify-content-center">
+            <ul class="nav navbar-nav flex-fill w-100 flex-nowrap">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:edit' %}">Account</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav flex-fill justify-content-center">
+                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:root' %}"><img src="{% static 'logos/mynk_cat.png' %}"
+                            style="width: 60px; height: auto;" class="img-responsive"></a></li>
+            </ul>
+            <ul class="nav navbar-nav flex-fill w-100 justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger btn-sm mb-4"
+                            style="float: center;"><i class="fas fa-sign-out-alt"></i> Logout</a></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert"
+        style="margin-left: -4px; margin-right: -4px;margin-top: -25px;">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <br>
+    {% endfor %}
+    {% endif %}
+
+    <div class="page-content">
+        {% block content %}{% endblock %}
+    </div>
+    <!-- Scripts -->
+    <!-- Core JS - includes jquery, bootstrap, popper, in-view and sticky-kit -->
+    <script src="{% static 'purpose-UI/js/purpose.core.js' %}"></script>
+    <!-- Purpose JS -->
+    <script src="{% static 'purpose-UI/js/purpose.js' %}"></script>
+
+    {% block script %}{% endblock %}
+
+
+</body>

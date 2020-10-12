@@ -1,60 +1,124 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container-fluid">
+<div class="container">
+
     <div class="row justify-content-center">
-        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
-            <div class="card shadow p-3 mb-5">
+        <div class="col-lg-3 col-md-12">
+            <div class="card shadow p-3 mb-1">
                 <div class="card-body">
                     <center>
-                        <img src="{{user.profile.image.url}}" style="max-width: 60%;height: auto;"
-                            class="rounded-circle img-responsive">
-                    </center>
-                    <center>
-                        <h2>{{user}}</h2>
-
-                        <hr>
-                        <a href="{% url 'accounts:edit' %}" class="btn btn-warning btn-sm mt-1 mb-1"
-                            style="float: center;">Edit Profile</a>
-                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger btn-sm mt-1 mb-1"
-                            style="float: center;">Logout</a>
-                    </center>
-                </div>
-            </div>
-
-            <div class="card shadow p-3 mb-5">
-                <div class="card-body">
-                    <center>
-                        <h3>{{user.profile.monthly_limit}} SEK</h3>
+                        <h3>{{monthly_limit}} SEK</h3>
                         <small class="text-muted">Monthly Expense Limit</small>
                     </center>
                 </div>
             </div>
 
-        </div>
-        <div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 col-12">
-            <div class="row justify-content-center">
+            <div class="card shadow p-3 mb-4">
+                <div class="card-body">
+                    <center>
+                        <h3>{{user.profile.monthly_savings}} SEK</h3>
+                        <small class="text-muted">Monthly Savings</small>
+                    </center>
+                </div>
+            </div>
 
-                <div class="col-md-6">
-                    <div class="card shadow">
+            <div class="card shadow p-3 mb-5">
+                <div class="card-body">
+                    <h5>Alerts</h5>
+                    {% if alerts %}
+                        {% for alert in alerts %}
+                            {% if alert.alert_message %}
+                                <p class="text-justify"><b>AlertID #{{alert.id}}: {{alert.alert_message}}</b></p>
+                            {% endif %} 
+                        {% endfor %}
+                     
+                    {% else %}
+                    <small class="text-justify">No new alerts</small>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <center>
+                        <a href="{% url 'alerts:root' %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Manage alerts</a>
+                    </center> 
+                </div>
+            </div>
+        </div>
+
+        <!--===========Left============================-->
+
+        <div class="col-md-9 col-sm-12 col-12">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="card shadow p-3 mb-5">
                         <div class="card-body">
-                            <center>
-                                <h1>{{spent}}</h1>
-                                <h3>Spent</h3>
-                            </center>
+                            <h5>Expense Distribution</h5>
+                            <div id="category-chart-container" style="width: 100%; height: 50%;" data-url="{% url 'dashboard:category-chart-data' %}"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <center>
-                                <h1>{{remaining}}</h1>
-                                <h3>Remaining</h3>
-                            </center>
+                <div class="col-lg-6 col-md-12">
+                    <div class="row justify-content-center">
+                        
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <center>
+                                        <h4>{{spent}} SEK</h4>
+                                        <h5>Spent</h5>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <center>
+                                        <h4>{{remaining}} SEK</h4>
+                                        <h5>Remaining</h5>
+                                    </center>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <center>
+                                        <h4>{{today}} SEK</h4>
+                                        <h5>Today</h5>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <center>
+                                        <h4>{{daily_average}} SEK</h4>
+                                        <h5>Daily Average</h5>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <h5><span class="badge badge-pill {{recommendation_badge}}">{{recommendation}}</span></h5>
+                                    <small class="text-muted text-justify">{{recommendation_message}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
                 </div>
             </div>
 
@@ -62,16 +126,16 @@
 
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <h1>
+                    <h4>
                         Categories
                         <span style="float: right;"><a class="btn btn-primary btn-sm mt-1 mb-1"
-                                href="{% url 'category:add' %}">Add</a></span>
-                    </h1>
+                                href="{% url 'category:add' %}"><i class="fas fa-plus"></i> Add</a></span>
+                    </h4>
                     <hr>
 
                     <div class="row">
                         {% for category in categories %}
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-12">
                             <div class="card">
                                 <div class="card-body">
 
@@ -98,16 +162,20 @@
                                         </span>
                                     </div>
 
-                                    <h3>{{category.name}}</h3>
-                                    <p>{{category.value}}</p>
-                                    
-                                    
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar"
-                                            style="width: {{cat_spent_per}}%;" aria-valuenow="{{cat_spent}}"
-                                            aria-valuemin="0" aria-valuemax="{{category.value}}}"></div>
+                                    <h5>{{category.name}}</h5>
+                                    <p>{{category.value}} SEK</p>
+
+
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar {{category.get_progress_color}}" role="progressbar"
+                                            style="width: {{category.calc_progress_percent}}%;"
+                                            aria-valuenow="{{category.this_month}}" aria-valuemin="0"
+                                            aria-valuemax="{{category.value}}">
+                                            <font color="black" style="margin-left: 3px;">
+                                                <b>{{category.this_month}}/{{category.value}}</b></font>
+                                        </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -117,21 +185,29 @@
             </div>
 
             <br><br>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-10">
                 <div class="col-md-12">
-                    <h1>
+                    <h4>
                         Expense Log
                         <span style="float: right;"><a class="btn btn-primary btn-sm mt-1 mb-1"
-                            href="{% url 'expense_log:create' %}">Add</a></span>
-                    </h1>
+                                href="{% url 'expense_log:create' %}"><i class="fas fa-plus"></i> Add</a></span>
+                    </h4>
                     <hr>
 
-                    <div class="row">
+                    <div class="row" style="border-left: solid 2px#4bd6e5;">
                         {% for expense in expenseLogs %}
+
+                        {% ifchanged expense.date %}
+                        <div class="col-md-12 mb-3">
+                            <div class="badge badge-pill badge-dark">
+                                {{expense.date|date}}
+                            </div>
+                        </div>
+                        {% endifchanged %}
+
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-
                                     <div style="float: right;">
                                         <span class="ml-1">
                                             <a href="{% url 'expense_log:edit' expense.id %}">
@@ -155,8 +231,17 @@
                                         </span>
                                     </div>
 
-                                    <h3>{{expense.amount}} - {{expense.category}}</h3>
-                                    <small>{{expense.date}}</small><br><br>
+                                    <h5>
+                                        {% if expense.attachment %}
+                                        <a href="{{expense.attachment.url}}" target="_blank">
+                                            <i class="fas fa-paperclip"></i> {{expense.amount}} SEK -
+                                            {{expense.category}}
+                                        </a>
+                                        {% else %}
+                                        {{expense.amount}} SEK - {{expense.category}}
+                                        {% endif %}
+                                    </h5>
+
                                     <p class="text-justify">{{expense.notes}}</p>
                                 </div>
                             </div>
@@ -169,4 +254,18 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+    $.ajax({
+      url: $("#category-chart-container").attr("data-url"),
+      dataType: 'json',
+      success: function (data) {
+        Highcharts.chart("category-chart-container", data);
+      }
+    });
+</script>
+
 {% endblock %}

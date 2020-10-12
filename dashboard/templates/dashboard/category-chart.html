@@ -1,0 +1,11 @@
+<canvas id="pie-chart-container" style="width: 100%;" data-url="{% url 'dashboard:category-chart-data' %}"></canvas>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+    $.ajax({
+      url: $("#pie-chart-container").attr("data-url"),
+      dataType: 'json',
+      success: function (data) {
+        Highcharts.chart("pie-chart-container", data);
+      }
+    });
+</script>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<div class = "container" style="position: relative;margin-top: 5%;">
+	<div class = "container">
 		<div class="row justify-content-center">
 		<div class = "col-md-8">
 			<div class="card shadow">
@@ -12,7 +12,7 @@
                             <hr>
                             <p class="text-justify">
                                 Are you sure you want to delete {{category.name}} from your profile ?
-                                All expenses associated with this category will also be delete. To preserve them, change their category before continuing.
+                                All expenses associated with this category will also be deleted. To preserve them, change their category before continuing.
                             </p>
                             <br>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'category:delete' category.name %}">Delete</a>

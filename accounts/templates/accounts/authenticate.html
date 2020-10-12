@@ -1,32 +1,38 @@
-{% extends 'base.html' %}
+{% extends 'authBase.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
-	<div class = "container" style="position: relative;margin-top: 5%;">
-		<div class="row justify-content-center">
-		<div class = "col-md-6">
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-12">
+			<center><img style="width: 150px;height: auto;" class="img-responsive"
+					src="{% static 'logos/mynk_ft.png' %}">
+				<h5 class="">Sign in to Mynk</h3>
+			</center>
+		</div>
+		<div class="col-md-6">
 			<div class="card shadow">
 				<div class="card-body">
-					<div class="row">
+					<div class="row justify-content-center">
 						<div class="col-md-12">
-                            <h1>Login to MYNK</h1>
-                            <hr>
-							<form action="{% url 'accounts:authenticate'%}" method="post" class = "form-group">
+
+							<form action="{% url 'accounts:authenticate'%}" method="post" class="form-group">
 								{% csrf_token %}
 								{{authForm|crispy}}
 								{% if request.GET.next %}
-								    <input type="hidden" name="next" value="{{request.GET.next}}">
+								<input type="hidden" name="next" value="{{request.GET.next}}">
 								{% endif %}
-								
-								<input type="submit" name="login" value="Login" class="btn btn-success btn-sm mt-1 mb-1">
-								
-                            </form>
-                            <br>
-                            <a style="text-decoration: none;" href = "{% url 'accounts:register' %}"><small>Need an account?</small></a>
+								<input type="submit" name="login" value="Login"
+									class="btn btn-success btn-sm mt-1 mb-1">
+							</form>
+							<br>
+							<a style="text-decoration: none;" href="{% url 'accounts:register' %}"><small>Need an
+									account?</small></a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		</div>
 	</div>
+</div>
 {% endblock %}
