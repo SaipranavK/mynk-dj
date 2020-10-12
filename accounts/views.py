@@ -7,6 +7,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import Profile
 from .forms import ProfileForm
 
+from category.models import Category
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("dashboard:root")
@@ -65,8 +67,12 @@ def account_setup(request):
         if profileForm.is_valid():
             instance = profileForm.save(commit = False)
             instance.user = request.user
-            instance.save()
+            
+            if instance.monthly_limit < instance.monthly_savings:
+                messages.warning(request, f"Monthly savings cannot be greater than your monthly expense limit")
+                return redirect('accounts:setup')
 
+            instance.save()
             return redirect('dashboard:root')
     else:
         profileForm = ProfileForm()
@@ -77,11 +83,27 @@ def account_setup(request):
 def edit_profile(request):
     user = request.user 
     if request.method == 'POST':
+        
+        categories = Category.objects.filter(user = user)
+        category_sum = 0
+        for category in categories:
+            category_sum += category.value
+        
         profileForm = ProfileForm(request.POST, request.FILES, instance = user.profile)
         if(profileForm.is_valid()):
-            profileForm.save()
+            instance = profileForm.save(commit = False)
 
-            return redirect('dashboard:root')
+            if instance.monthly_limit < instance.monthly_savings:
+                messages.warning(request, f"Monthly savings cannot be greater than your monthly expense limit")
+                return redirect('accounts:edit')
+
+            if instance.monthly_limit - instance.monthly_savings < category_sum:
+                messages.warning(request, f"Your category wise expense limits are greater than your monthly expense limit. Please adjust category limits before changing your monthly expense limit")
+                return redirect('accounts:edit')
+
+            instance.save()
+            messages.warning(request, f"Account information updated")
+            
     else:
         profileForm = ProfileForm(instance = user.profile)
 
