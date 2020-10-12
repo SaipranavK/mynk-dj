@@ -1,7 +1,14 @@
 language: python
 python:
   - "3.6"      # current default Python on Travis CI
-  
+
+sudo: 'required'
+services:
+  - 'docker'
+
+before_install:
+  - './.travis/main.sh'
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
