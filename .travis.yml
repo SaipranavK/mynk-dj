@@ -1,7 +1,6 @@
 language: python
 python:
   - "3.6"      # current default Python on Travis CI
-
 sudo: 'required'
 services:
   - 'docker'
@@ -9,10 +8,12 @@ services:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+
 # command to run tests
 script:
   - python manage.py test
 
+# push docker image on build success
 after_success:
 - DOCKER_TAG=$TRAVIS_BRANCH
 - DOCKER_REPO=saipranavk/mynk
