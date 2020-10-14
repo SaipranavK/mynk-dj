@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -46,21 +47,34 @@ def create_log(request):
     return render(request, "expense_log/create.html", {"expenseLogForm":expenseLogForm})
 
 @login_required(login_url = 'accounts:authenticate')
-def update_log(request,id):    
+def update_log(request,id):
+   
     try:
-        ex_log = ExpenseLog.objects.get(pk = id)  
+        ex_log = ExpenseLog.objects.get(pk = id)
+        prev_amount = ex_log.amount  
 
     except:
-        messages.success("Unable to fetch requested expense log from your profile")
+        messages.success(request, f"Unable to fetch requested expense log from your profile")
         return redirect("dashboard:root")
     
     if request.method == 'POST':
-        expenseLogForm =ExpenseLogForm(request.FILES, request.POST, instance = ex_log)
+        
+        expenseLogForm = ExpenseLogForm(request.POST, request.FILES, instance = ex_log)
+        print(expenseLogForm)
         if expenseLogForm.is_valid():
+            
             instance = expenseLogForm.save(commit = False)
+            category = instance.category
 
-            try:
-                category = instance.category
+            print("Current: ", category.this_month)
+            print("Ex_log amount:", prev_amount)
+            category.this_month -= prev_amount
+            print("minus:", category.this_month)
+            print("Instance amount:", instance.amount)
+            category.this_month += instance.amount
+            print("new:", category.this_month)
+
+            try:                
                 userCheck = Q(user = request.user)
                 categoryCheck = Q(category = category)
                 alert = Alert.objects.get(userCheck & categoryCheck)
@@ -69,13 +83,15 @@ def update_log(request,id):
                     alert.save() 
             except:
                 pass
+
+            category.save()
+            instance.save()
             
             return redirect('dashboard:root')
     
     else:
-        expenseLogForm =ExpenseLogForm(instance = ex_log)
-        ##getting multiple instances of expenseLogForm of a single user
-
+        expenseLogForm = ExpenseLogForm(instance = ex_log)
+        
     expenseLogForm.fields["category"].queryset= Category.objects.filter(user = request.user)
         
     return render(request, "expense_log/edit.html", {"expenseLogForm":expenseLogForm})
