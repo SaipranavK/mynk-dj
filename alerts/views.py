@@ -42,6 +42,8 @@ def create_alert(request):
 
     else:
         alertForm = AlertForm()
+    
+    alertForm.fields["category"].queryset= Category.objects.filter(user = request.user)
 
     return render(request, "alerts/add.html", {"alertForm": alertForm})
 

@@ -11,7 +11,10 @@ class Category(models.Model):
         return self.name
 
     def calc_progress_percent(self):
-        return (self.this_month/self.value)*100
+        if self.value != 0:
+            return (self.this_month/self.value)*100
+        else:
+            return 0
 
     def get_progress_color(self):
         value = Category.calc_progress_percent(self)
