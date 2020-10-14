@@ -19,7 +19,11 @@ after_success:
 - DOCKER_REPO=saipranavk/mynk
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - docker build . -t mynk
-- docker tag mynk:latest ${DOCKER_REPO}:${DOCKER_TAG}
+- if [ $TRAVIS_BRANCH == "master"]; then
+    docker tag mynk:latest ${DOCKER_REPO}:latest
+  else
+    docker tag mynk:latest ${DOCKER_REPO}:${DOCKER_TAG}
+  fi
 - docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
 notifications:
