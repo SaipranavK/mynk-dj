@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -15,7 +14,19 @@ def dashboard_root(request):
     monthly_limit = request.user.profile.monthly_limit - request.user.profile.monthly_savings
 
     categories = Category.objects.filter(user = request.user)
-    expenseLogs = ExpenseLog.objects.filter(user = request.user).order_by('-date')
+
+    date_today = date.today()
+    days_this_month = 0
+
+    if date_today.month%2 == 0 or date_today != 2 or date_today != 8:
+        days_this_month = 30
+    
+    elif date_today == 8:
+        days_this_month = 31
+
+    #pending case for feb
+    
+    expenseLogs = ExpenseLog.objects.filter(user = request.user, date__range=(date_today.replace(day=1), date_today.replace(day=days_this_month))).order_by('-date')
     
     spent = remaining = 0
     for category in categories:
@@ -23,11 +34,11 @@ def dashboard_root(request):
 
     today = 0
     for expense in expenseLogs:
-        if expense.date == date.today():
+        if expense.date == date_today:
             today += expense.amount
 
     remaining = monthly_limit - spent
-    time_delta = date.today() - date.today().replace(day=1)
+    time_delta = date_today - date_today.replace(day=1)
     daily_average = int(spent/ (time_delta.days+1)) 
 
     if daily_average > (monthly_limit/30):

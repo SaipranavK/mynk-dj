@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h4>
+                Reports
+            </h4>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        {% if reports %}
+        {% for report in reports %}
+        <div class="col-md-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4>{{report.period}}</h4>
+                    <small>{{report.total_exp}} SEK</small>
+                    <br>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> View full report
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <small class="text-justify">No reports created for this profile. Reports are automatically generated at the end of each month.</small>
+        {% endif %}
+    </div>
+
+    {% endblock %}
