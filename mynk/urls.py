@@ -30,7 +30,8 @@ urlpatterns = [
     path('alerts/', include('alerts.urls')),
     path('category/', include('category.urls')),
     path('dashboard/', include('dashboard.urls')),
-    path('expense-log/', include('expense_log.urls'))
+    path('expense-log/', include('expense_log.urls')),
+    path('reports/', include('reports.urls'))
 ]
 
 urlpatterns+=staticfiles_urlpatterns()

@@ -16,7 +16,6 @@ from alerts.models import Alert
 def create_log(request):
     if request.method == 'POST':
         expenseLogForm =ExpenseLogForm(request.POST, request.FILES)   
-        print(expenseLogForm) 
         if expenseLogForm.is_valid():
             instance = expenseLogForm.save(commit=False)
             instance.user=request.user

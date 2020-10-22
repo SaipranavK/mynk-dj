@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'category.apps.CategoryConfig',
     'dashboard.apps.DashboardConfig',
     'expense_log.apps.ExpenseLogConfig',
+    'reports.apps.ReportsConfig',
     'crispy_forms',
 ]
 
