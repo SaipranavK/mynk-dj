@@ -12,6 +12,9 @@ from .forms import ExpenseLogForm
 from category.models import Category
 from alerts.models import Alert
 
+from datetime import date
+date_today = date.today()
+
 @login_required(login_url = 'accounts:authenticate')
 def create_log(request):
     if request.method == 'POST':
@@ -19,6 +22,10 @@ def create_log(request):
         if expenseLogForm.is_valid():
             instance = expenseLogForm.save(commit=False)
             instance.user=request.user
+            
+            if instance.date.month != date_today.month:
+                messages.warning(request, f"Cannot add expense log of previous or coming months")
+                return redirect('expense_log:create')
             
             category = instance.category
             category.this_month += instance.amount
@@ -56,10 +63,14 @@ def update_log(request,id):
             if request.method == 'POST':
             
                 expenseLogForm = ExpenseLogForm(request.POST, request.FILES, instance = ex_log)
-                print(expenseLogForm)
                 if expenseLogForm.is_valid():
-                    
+
                     instance = expenseLogForm.save(commit = False)
+
+                    if instance.date.month != date_today.month:
+                        messages.warning(request, f"Cannot change expense log to previous or coming months")
+                        return redirect('dashboard:root')
+
                     category = instance.category
 
                     print("Current: ", category.this_month)

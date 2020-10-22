@@ -8,24 +8,37 @@ from expense_log.models import ExpenseLog
 
 from datetime import date
 
+report_generated = False
+
 @login_required(login_url = 'accounts:authenticate')
 def dashboard_root(request):
-
-    monthly_limit = request.user.profile.monthly_limit - request.user.profile.monthly_savings
-
-    categories = Category.objects.filter(user = request.user)
-
+    
     date_today = date.today()
     days_this_month = 0
-
+    
     if date_today.month%2 == 0 or date_today != 2 or date_today != 8:
         days_this_month = 30
     
-    elif date_today == 8:
+    elif date_today.month == 8:
         days_this_month = 31
 
-    #pending case for feb
-    
+    elif date_today.month == 2:
+        if date_today.year % 4 == 0:
+            if date_today.year % 100 == 0:
+                if date_today.year % 400 == 0:
+                    days_this_month = 29
+                else:
+                    days_this_month = 28
+            else:
+                days_this_month = 29
+        else:
+            days_this_month = 28
+
+    if date_today.day == 1:
+        return redirect("reports:generate")
+
+    monthly_limit = request.user.profile.monthly_limit - request.user.profile.monthly_savings
+    categories = Category.objects.filter(user = request.user)
     expenseLogs = ExpenseLog.objects.filter(user = request.user, date__range=(date_today.replace(day=1), date_today.replace(day=days_this_month))).order_by('-date')
     
     spent = remaining = 0
@@ -92,3 +105,4 @@ def category_chart_data(request):
     }
 
     return JsonResponse(chart)
+
