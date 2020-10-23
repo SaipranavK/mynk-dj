@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h4>
+                {{report.get_period}}
+            </h4>
+            <hr>
+        </div>
+    </div>
+
+    
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h4>Categories</h4>
+        </div>
+        {% for snap in categorySnaps %}
+        <div class="col-lg-3 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{snap.category}}</h5>
+                    <span class="badge badge-success badge-pill">{{snap.spent}} SEK</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br><br>
+    <div class="row justify-content-center mb-10">
+        <div class="col-md-12">
+            <h4>
+                Expense Log
+                
+            </h4>
+            <hr>
+
+            <div class="row" style="border-left: solid 2px#4bd6e5;">
+                {% for expense in expenseLogs %}
+
+                {% ifchanged expense.date %}
+                <div class="col-md-12 mb-3">
+                    <div class="badge badge-pill badge-dark">
+                        {{expense.date|date}}
+                    </div>
+                </div>
+                {% endifchanged %}
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>
+                                {% if expense.attachment %}
+                                <a href="{{expense.attachment.url}}" target="_blank">
+                                    <i class="fas fa-paperclip"></i> {{expense.amount}} SEK -
+                                    {{expense.category}}
+                                </a>
+                                {% else %}
+                                {{expense.amount}} SEK - {{expense.category}}
+                                {% endif %}
+                            </h5>
+                            <p class="text-justify">{{expense.notes}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
