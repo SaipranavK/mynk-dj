@@ -4,14 +4,62 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h4>
+                <span>
+                    <i class="fas fa-calendar-alt"></i>
+                </span> 
                 {{report.get_period}}
             </h4>
             <hr>
         </div>
     </div>
 
-    
     <div class="row justify-content-center">
+        <div class="col-lg-3 col-sm-12">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <center>
+                                <h4>{{report.total_exp}} SEK</h4>
+                                <h5>Total Expense</h5>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <center>
+                                <h4>{{report.daily_avg}} SEK</h4>
+                                <h5>Daily Average</h5>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <center>
+                                <h4>{{report.savings}} SEK</h4>
+                                <h5>Savings this Month</h5>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="card shadow p-3 mb-5">
+                <div class="card-body">
+                    <h5>Expense Distribution</h5>
+                    <div id="category-chart-container" style="width: 100%; height: 50%;" data-url="{% url 'reports:category-chart-data' report.id %}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    <div class="row">
         <div class="col-md-12">
             <h4>Categories</h4>
         </div>
@@ -20,7 +68,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5>{{snap.category}}</h5>
-                    <span class="badge badge-success badge-pill">{{snap.spent}} SEK</span>
+                    <span class="badge badge-primary badge-pill">{{snap.spent}} SEK</span>
                 </div>
             </div>
         </div>
@@ -28,7 +76,7 @@
     </div>
 
     <br><br>
-    <div class="row justify-content-center mb-10">
+    <div class="row mb-10">
         <div class="col-md-12">
             <h4>
                 Expense Log
@@ -69,4 +117,18 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+    $.ajax({
+      url: $("#category-chart-container").attr("data-url"),
+      dataType: 'json',
+      success: function (data) {
+        Highcharts.chart("category-chart-container", data);
+      }
+    });
+</script>
+
 {% endblock %}

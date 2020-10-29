@@ -14,6 +14,24 @@ from datetime import date
 def dashboard_root(request):
     
     date_today = date.today()
+    
+    print("Checking Date:", date_today.day)
+    if date_today.day == 1 :
+        print("Generating report")
+        userCheck = Q(user = request.user)
+        prev_month = 0
+    
+        if date_today.month != 1:
+            prev_month = date_today.month - 1
+        else:
+            prev_month = 12
+            
+        periodCheck = Q(period = date_today.replace(month=prev_month))
+        if Report.objects.filter(userCheck & periodCheck).exists():
+            pass
+        else:
+            return redirect("reports:generate")
+    
     days_this_month = 0
     
     if date_today.month%2 == 0 or date_today != 2 or date_today != 8:
@@ -33,18 +51,6 @@ def dashboard_root(request):
                 days_this_month = 29
         else:
             days_this_month = 28
-
-    
-    print("Checking Date:", date_today.day)
-    if date_today.day == 1 :
-        print("Generating report")
-        userCheck = Q(user = request.user)
-        prev_month = date_today.month - 1
-        periodCheck = Q(period = date_today.replace(month=prev_month))
-        if Report.objects.filter(userCheck & periodCheck).exists():
-            pass
-        else:
-            return redirect("reports:generate")
 
     monthly_limit = request.user.profile.monthly_limit - request.user.profile.monthly_savings
     categories = Category.objects.filter(user = request.user)

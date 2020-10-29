@@ -17,7 +17,13 @@
         <div class="col-md-3">
             <div class="card shadow">
                 <div class="card-body">
-                    <h4>{{report.get_period}}</h4>
+                    <h4>
+                        <span>
+                            <i class="fas fa-calendar-alt"></i>
+                        </span>
+                        {{report.get_period}}
+                    </h4>
+                    <br>
                     <span class="badge badge-dark badge-pill">{{report.total_exp}} SEK</span>
                     <br><br>
                     <a href="{% url 'reports:details' report.id %}" class="btn btn-primary btn-sm">

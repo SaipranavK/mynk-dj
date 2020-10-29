@@ -135,18 +135,21 @@ def delete_log(request, id):
 
             userCheck = Q(user = request.user)
             categoryCheck = Q(category = category)
-            alert = Alert.objects.get(userCheck & categoryCheck)
             
-            if category.this_month >= alert.limit:
-                if alert.alert_message == None:
-                    alert.alert_message = "You have crossed your alert limit for "+ category.name +" this month. Be careful while spending to avoid going your budget"
-                    
-            else:
-                if alert.alert_message:
-                    alert.alert_message = None
+            
+            if Alert.objects.filter(userCheck & categoryCheck).exists():
+                alert = Alert.objects.get(userCheck & categoryCheck)
+            
+                if category.this_month >= alert.limit:
+                    if alert.alert_message == None:
+                        alert.alert_message = "You have crossed your alert limit for "+ category.name +" this month. Be careful while spending to avoid going your budget"
+                        
+                else:
+                    if alert.alert_message:
+                        alert.alert_message = None
 
-            alert.save()         
-            
+                alert.save()         
+                
             messages.success(request, f"Expense Log deleted from your profile")
             return redirect("dashboard:root") 
     

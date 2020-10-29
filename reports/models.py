@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 from category.models import Category
 
@@ -7,7 +8,9 @@ class Report(models.Model):
 
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     period = models.DateField()
-    total_exp = models.PositiveIntegerField(default = 0)
+    total_exp = models.FloatField(default = 0, validators=[MinValueValidator(0)])
+    daily_avg = models.FloatField(default = 0, validators=[MinValueValidator(0)])
+    savings = models.FloatField(default = 0 , validators=[MinValueValidator(0)])
 
     def __str__(self):
         return str(self.user) + " | " + str(self.period)
@@ -23,7 +26,7 @@ class CategorySnap(models.Model):
 
     report = models.ForeignKey(Report, on_delete = models.CASCADE)
     category = models.CharField(max_length = 128)
-    spent = models.PositiveIntegerField(default = 0)
+    spent = models.FloatField(default = 0, validators=[MinValueValidator(0)])
 
     def __str__(self):
         return str(self.report) + " | " + str(self.category)
