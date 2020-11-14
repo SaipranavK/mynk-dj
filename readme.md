@@ -36,9 +36,3 @@ python manage.py runserver
 <img src="./public/mynk_dashboard.png">
 <img src="./public/mynk_dashboard2.png">
 
-
-## Todos
-
-- [ ] Manage alerts
-- [ ] Manage Reports
-- [ ] Write unit and integration tests for all apps
