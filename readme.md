@@ -3,8 +3,6 @@
 
 Mynk supports monthly budget management with expense visualizations, alerts and monthly reports to review your purchases. Users can set monthly expense limit and distrubute this sum into different categories. All the expenses made will be associated to a specific category declared by the user. Based on the expense limit and expense rate, Mynk will warn the user if they are overspending. Stats are updated daily. User can monitor their daily average expense along side category wise distrubution of their total expense so far. After every month, the expenses are translated into monthly reports for later reference. 
 
-<b>Live Preview:</b> https://mynk.saipranavk.usw1.kubesail.org/accounts/authenticate/
-
 ---
 
 ## Usage
